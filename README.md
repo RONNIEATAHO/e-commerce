@@ -1,2 +1,2 @@
-# e-commerce
-this is an e-commerce website
+# E-commerce
+ Ecommerce Website. Built for a smooth shopping experience and efficient store management.
