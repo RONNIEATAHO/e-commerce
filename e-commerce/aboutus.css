@@ -1,61 +1,91 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #faf8f8;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
     color: #333;
     margin: 0;
     padding: 0;
-	background-image: url("imvfg.jpg");
+    background-image: url("imvfg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    line-height: 1.6;
 }
 
+/* Header Styles */
 header {
-    background-color: #b35555;
+    background-color: #1a1a1a;
     color: white;
-    padding: 20px;
+    padding: 40px 20px;
     text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
 header h1 {
     margin-bottom: 10px;
-    font-size: 2.5em;
+    font-size: 3em;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 header p {
-    font-size: 1.2em;
+    font-size: 1.3em;
+    color: #ccc;
 }
 
+/* Section Content */
 section {
-    margin: 20px auto;
-    padding: 20px;
-    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    max-width: 1000px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 section h2 {
-    font-size: 2em;
-    margin-bottom: 10px;
+    font-size: 2.2em;
+    margin-bottom: 15px;
+    color: #222;
+    border-left: 5px solid #ff6600;
+    padding-left: 10px;
 }
 
+/* Mission Text */
 .mission p {
-    font-size: 1.1em;
+    font-size: 1.2em;
+    color: #555;
+    padding: 10px 0;
 }
 
+/* Values List */
 .values ul {
     list-style: none;
     padding: 0;
 }
 
 .values ul li {
-    background-color: #f0f0f0;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-left: 5px solid #2e8b57;
+    background-color: #f9f9f9;
+    margin-bottom: 12px;
+    padding: 14px 18px;
+    border-left: 5px solid #007bff;
+    border-radius: 8px;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
 }
 
+.values ul li:hover {
+    background-color: #e6f0ff;
+}
+
+/* Footer Styles */
 footer {
     text-align: center;
-    background-color: #333;
+    background-color: #111;
     color: white;
-    padding: 20px;
-    position: absolute;
-    width: 100%;
+    padding: 25px 10px;
+    font-size: 0.95em;
+    position: relative;
     bottom: 0;
+    width: 100%;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
 }
