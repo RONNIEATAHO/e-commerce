@@ -1,38 +1,44 @@
-<?php
-session_start(); // Start the session for user management, if needed
+/* Basic styling for the About Us page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
 
-// You can include any necessary backend PHP files for database or user management here
-// Example: include('db_connection.php');
-?>
+header {
+    background-color: #b35555;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="aboutus.css">
-    <title>About Us - Olive Shoppers</title>
-</head>
-<?php include('header.php');?>               
-<body>
-    <header>
-  
-    </header>
+h2 {
+    color: #b35555;
+}
 
-    <section class="mission">
-        <h2>Our Mission</h2>
-        <p>To provide quality products and exceptional services to all our customers, ensuring a seamless shopping experience online.</p>
-    </section>
+section {
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
 
-    <section class="values">
-        <h2>Our Values</h2>
-        <ul>
-            <li><strong>Integrity:</strong> We believe in honest and transparent business practices.</li>
-            <li><strong>Customer Centric:</strong> Our customers are at the heart of everything we do.</li>
-            <li><strong>Innovation:</strong> Continuously improving and innovating to meet the needs of our shoppers.</li>
-        </ul>
-    </section>
+ul {
+    list-style-type: none;
+    padding: 0;
+}
 
-</body>
-<?php include('footer.php');?> 
-</html>
+ul li {
+    margin: 10px 0;
+}
+
+footer {
+    text-align: center;
+    background-color: #b35555;
+    color: white;
+    padding: 20px;
+}
