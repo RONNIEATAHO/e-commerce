@@ -20,11 +20,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_item'])) {
 
 // Handle confirming the order
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_order'])) {
-    // Save the order to the database (you can implement this part)
-    // Clear the cart after confirming the order
-    unset($_SESSION['cart']);
-    header('Location: order_confirmation.php');
-    exit();
+    include 'db_connection.php';
+
+    $userId = $_SESSION['user_id'];
+    $customerName = $_SESSION['username'] ?? 'Guest';
+    $items = $_SESSION['cart'];
+    $totalPrice = 0;
+
+    foreach ($items as $item) {
+        $totalPrice += $item['price'] * $item['quantity'];
+    }
+
+    $encodedItems = json_encode($items);
+    $orderDate = date('Y-m-d H:i:s');
+
+    $stmt = $conn->prepare("INSERT INTO orders (user_id, customer_name, items, total_price, order_date) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("issds", $userId, $customerName, $encodedItems, $totalPrice, $orderDate);
+
+    if ($stmt->execute()) {
+        unset($_SESSION['cart']);
+        header('Location: order_confirmation.php');
+        exit();
+    } else {
+        echo "Error saving order: " . $conn->error;
+    }
 }
 ?>
 
