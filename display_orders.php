@@ -2,26 +2,17 @@
 session_start();
 include 'db_connection.php'; // Include the database connection
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    // Fetch admin data from the database
-    $stmt = $pdo->prepare("SELECT * FROM admins WHERE username = :username");
-    $stmt->bindParam(':username', $username);
-    $stmt->execute();
-    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($admin && password_verify($password, $admin['password'])) {
-        // Login successful: set session variable for admin
-        $_SESSION['admin_logged_in'] = true;
-        $_SESSION['admin_username'] = $admin['username'];
-        header("Location: admin_dashboard.php"); // Redirect to dashboard
-        exit();
-    } else {
-        $error = "Invalid username or password.";
-    }
+// Redirect if not logged in as admin
+if (!isset($_SESSION['admin_logged_in']) || !$_SESSION['admin_logged_in']) {
+    header("Location: admin_login.php"); // Redirect to login page if not logged in
+    exit();
 }
+
+// Fetch orders from the database
+$stmt = $pdo->prepare("SELECT * FROM orders");
+$stmt->execute();
+$orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -85,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <p><strong>Items:</strong></p>
                 <ul>
                     <?php
-                    $items = json_decode($order['items'], true);
+                    $items = json_decode($order['items'], true); // Assuming items are stored as JSON
                     foreach ($items as $item): ?>
                         <li><?php echo htmlspecialchars($item['name']); ?> - $<?php echo htmlspecialchars($item['price']); ?></li>
                     <?php endforeach; ?>
