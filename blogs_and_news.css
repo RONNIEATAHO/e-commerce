@@ -1,29 +1,41 @@
+/* General Navigation Styling */
 nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #333;
+    background-color: #333;  /* Dark background for nav */
     padding: 10px;
-  }
-  
-  nav a {
+}
+
+nav a {
     color: #fff;
     text-decoration: none;
     padding: 10px;
     border-radius: 5px;
-  }
-  
-  nav a:hover {
-    background-color: #444;
-  }
-  body h1{
-    background-color: #b35555;
-    margin: 0 auto;
+}
+
+nav a:hover {
+    background-color: #444;  /* Hover effect */
+}
+
+/* Header Styling */
+header {
+    background-color: #b35555;  /* Olive Shoppers brand color */
     padding: 20px;
     text-align: center;
 }
-body nav{
-    background-color: #b35555;
-    margin: 0 auto;
+
+header h1 {
+    color: white;
+    margin: 0;
     padding: 20px;
+}
+
+/* You can also remove the redundant 'body nav' styling if you only want to style the 'nav' inside the header. */
+
+/* Optional: Navigation Links Styling for Larger Screens */
+@media (min-width: 768px) {
+    nav a {
+        padding: 15px;  /* Adjust padding for larger screens */
+    }
 }
