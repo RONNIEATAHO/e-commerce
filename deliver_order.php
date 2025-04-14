@@ -5,6 +5,17 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'waiter') {
     exit();
 }
 include 'db_connection.php';
+
+// Fetch orders from the database
+$sql = "SELECT * FROM orders ORDER BY order_date DESC";
+$result = mysqli_query($conn, $sql);
+
+$orders = [];
+if ($result && mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $orders[] = $row;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -53,8 +64,9 @@ include 'db_connection.php';
 </head>
 <body>
     <h1>Orders for Delivery</h1>
+
     <?php if (empty($orders)): ?>
-        <p>No orders found.</p>
+        <p style="text-align:center;">No orders found.</p>
     <?php else: ?>
         <?php foreach ($orders as $order): ?>
             <div class="order">
@@ -65,9 +77,14 @@ include 'db_connection.php';
                 <ul>
                     <?php
                     $items = json_decode($order['items'], true);
-                    foreach ($items as $item): ?>
-                        <li><?php echo htmlspecialchars($item['name']); ?> - $<?php echo htmlspecialchars($item['price']); ?></li>
-                    <?php endforeach; ?>
+                    if (is_array($items)) {
+                        foreach ($items as $item): ?>
+                            <li><?php echo htmlspecialchars($item['name']); ?> - $<?php echo htmlspecialchars($item['price']); ?></li>
+                        <?php endforeach;
+                    } else {
+                        echo '<li>No items found or invalid format.</li>';
+                    }
+                    ?>
                 </ul>
                 <p><strong>Total:</strong> $<?php echo htmlspecialchars($order['total_price']); ?></p>
             </div>
