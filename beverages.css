@@ -5,18 +5,19 @@ body {
     padding: 0;
 }
 
+/* Main Content */
 main {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
-main h1{
+
+main h1 {
     font-size: 400%;
     text-align: center;
     font-family: Georgia, 'Times New Roman', Times, serif;
     color: chocolate;
 }
-
 
 /* Product Section */
 .product-section {
@@ -30,6 +31,7 @@ main h1{
     padding: 20px;
     text-align: center;
     transition: transform 0.2s ease-in-out;
+    border-radius: 8px; /* Adding rounded corners for a modern touch */
 }
 
 .product-item:hover {
@@ -42,6 +44,7 @@ main h1{
     height: auto;
     margin-bottom: 10px;
     transition: transform 0.2s ease-in-out;
+    border-radius: 8px; /* Adding rounded corners to images */
 }
 
 .product-item img:hover {
@@ -51,21 +54,25 @@ main h1{
 .product-item h2 {
     font-size: 18px;
     margin-bottom: 5px;
+    color: #333;
     transition: color 0.2s ease-in-out;
 }
-
 
 .product-item p {
     font-size: 16px;
     color: #666;
+    line-height: 1.5;  /* Improves readability */
     transition: color 0.2s ease-in-out;
 }
-
-
 
 /* Responsive Design */
 @media (max-width: 768px) {
     .product-section {
         grid-template-columns: 1fr;
+    }
+    
+    /* Optional: You can also adjust the padding for smaller devices */
+    .product-item {
+        padding: 15px;
     }
 }
