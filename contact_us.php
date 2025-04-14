@@ -5,24 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - Olive Shoppers</title>
     <link rel="stylesheet" href="contact_us.css">
-    
 </head>
 <body>
     <header>
-        
+        <!-- Assuming you will add navigation items later -->
         <nav></nav>
-                
-        <?php include('header.php');?> 
-      
-
-    </nav>
+        <?php include('header.php'); ?>
     </header>
 
     <section class="contact-info">
         <h2>Contact Information</h2>
         <p><strong>Email:</strong> support@oliveshoppers.com</p>
         <p><strong>Phone:</strong> 0785585071</p>
-        </p>
         <p><strong>Address:</strong> P.O.BOX 72 Mbarara</p>
     </section>
 
@@ -41,7 +35,7 @@
             <button type="submit">Submit</button>
         </form>
     </section>
-<br><br>
-  
+
+    <br><br>
 </body>
 </html>
