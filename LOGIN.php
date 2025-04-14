@@ -7,13 +7,14 @@ if (!isset($conn)) {
     die("Database connection failed. Check db_connection.php.");
 }
 
-// Handle login form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
+// ========= NEW FUNCTIONAL MODULES =========
+
+function handleLogin($conn) {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
-    $role = $_POST['role']; // Selected role
+    $role = $_POST['role'];
 
-    // Fetch user from the database
+    // Fetch user from DB
     $sql = "SELECT * FROM login WHERE username = :username AND role = :role";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':username', $username);
@@ -21,45 +22,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Verify password and login
+    // Verify password
     if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['role'] = strtolower($user['role']); // Ensure case-insensitive comparison
-
-        // Set additional session variables for admins
-        if ($_SESSION['role'] === 'admin') {
-            $_SESSION['admin_logged_in'] = true;
-            $_SESSION['admin_id'] = $user['id'];
-        }
-
-        // Redirect based on role
-        switch ($_SESSION['role']) {
-            case 'customer':
-                header('Location: beverages.php');
-                break;
-            case 'waiter':
-                header('Location: deliver_orders.php');
-                break;
-            case 'admin':
-                header('Location: admindashboard.php');
-                break;
-            default:
-                die("Invalid role.");
-        }
+        initializeSession($user);
+        redirectUser($user['role']);
         exit();
     } else {
-        $login_error = "Wrong credentials. Please try again.";
+        return "Wrong credentials. Please try again.";
+    }
+    return null;
+}
+
+function initializeSession($user) {
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['username'] = $user['username'];
+    $_SESSION['role'] = strtolower($user['role']);
+
+    if ($_SESSION['role'] === 'admin') {
+        $_SESSION['admin_logged_in'] = true;
+        $_SESSION['admin_id'] = $user['id'];
     }
 }
 
-// Handle signup form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])) {
+function redirectUser($role) {
+    switch (strtolower($role)) {
+        case 'customer':
+            header('Location: beverages.php');
+            break;
+        case 'waiter':
+            header('Location: deliver_orders.php');
+            break;
+        case 'admin':
+            header('Location: admindashboard.php');
+            break;
+        default:
+            die("Invalid role.");
+    }
+}
+
+function handleSignup($conn) {
     $username = trim($_POST['username']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash password
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $role = $_POST['role'];
 
-    // Insert new user into the database
     $sql = "INSERT INTO login (username, password, role) VALUES (:username, :password, :role)";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':username', $username);
@@ -67,9 +72,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])) {
     $stmt->bindParam(':role', $role);
 
     if ($stmt->execute()) {
-        $signup_success = "Signup successful! Please login.";
+        return "Signup successful! Please login.";
     } else {
-        $signup_error = "Signup failed. Please try again.";
+        return "Signup failed. Please try again.";
+    }
+}
+
+// ========= ORIGINAL LOGIC WITH FUNCTION CALLS =========
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['login'])) {
+        $login_error = handleLogin($conn); // Preserve original behavior
+    }
+
+    if (isset($_POST['signup'])) {
+        $signup_feedback = handleSignup($conn);
+        if (strpos($signup_feedback, 'successful') !== false) {
+            $signup_success = $signup_feedback;
+        } else {
+            $signup_error = $signup_feedback;
+        }
     }
 }
 ?>
