@@ -151,6 +151,39 @@ function logError($message) {
 <?php endif; ?>
 
 <a href="logout.php">Logout</a>
+<div class="chart-container">
+    <canvas id="performanceChart"></canvas>
+</div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Get data from PHP to JavaScript
+    const perfData = <?php echo json_encode(getPerformanceData('week')); ?>;
+    
+    // Prepare chart data
+    const labels = perfData.map(item => item.endpoint);
+    const data = perfData.map(item => item.avg_time);
+    
+    // Create chart
+    new Chart(document.getElementById('performanceChart'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Average Response Time (ms)',
+                data: data,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 </body>
 </html>
