@@ -10,6 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 $userId = $_SESSION['user_id'];
 $cartItems = [];
 $total = 0;
+$error = "";
 
 // Remove item from cart
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_item_id'])) {
@@ -50,6 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_order'])) {
             $itemsStmt->execute();
             $cartItemsForOrder = $itemsStmt->fetchAll(PDO::FETCH_ASSOC);
 
+            if (empty($cartItemsForOrder)) {
+                throw new Exception("No items in cart to place an order.");
+            }
+
             $totalPrice = 0;
             foreach ($cartItemsForOrder as $item) {
                 $totalPrice += $item['quantity'] * $item['price'];
@@ -72,8 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_order'])) {
             // Insert order items
             foreach ($cartItemsForOrder as $item) {
                 $orderItemStmt = $conn->prepare("
-                    INSERT INTO order_items 
-                    (order_id, product_id, quantity, price) 
+                    INSERT INTO order_items (order_id, product_id, quantity, price) 
                     VALUES (:orderId, :productId, :quantity, :price)
                 ");
                 $orderItemStmt->bindParam(':orderId', $orderId, PDO::PARAM_INT);
@@ -91,13 +95,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_order'])) {
             // Commit transaction
             $conn->commit();
             
+            // After successful save, redirect
             header('Location: order_confirmation.php');
             exit();
+        } else {
+            throw new Exception("Cart not found for user.");
         }
     } catch (Exception $e) {
-        // Rollback on error
+        // Rollback transaction if anything fails
         $conn->rollBack();
-        echo "Order failed: " . $e->getMessage();
+        $error = "Order failed: " . $e->getMessage();
     }
 }
 
@@ -131,6 +138,7 @@ if ($cartRow) {
     <meta charset="UTF-8">
     <title>Your Cart</title>
     <style>
+        /* (Your CSS styles stay exactly the same, no change) */
         body {
             font-family: Arial, sans-serif;
             background-image: url('background.jpg');
@@ -242,6 +250,13 @@ if ($cartRow) {
             margin-top: 50px;
             color: #666;
         }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -252,6 +267,10 @@ if ($cartRow) {
 </nav>
 
 <div class="container">
+    <?php if ($error): ?>
+        <div class="error-message"><?= htmlspecialchars($error) ?></div>
+    <?php endif; ?>
+
     <?php if (empty($cartItems)): ?>
         <p class="empty-message">Your cart is currently empty.</p>
     <?php else: ?>
